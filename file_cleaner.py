@@ -3,7 +3,6 @@ import send2trash
 import typer
 from pathlib import Path
 import random
-import argparse
 
 
 def find_files_with_extension(directory: Path, extension: str, sort_order: str = 'asc') -> tuple:
@@ -93,8 +92,7 @@ def display_files_content(directory_path, files: list[str], confirm: bool = Fals
                 print(f"Erreur lors de la lecture du fichier '{file}': {e}")
 
 
-def main(directory: str, extension: str, delete: bool = False, display: bool = False,
-         confirm: bool = False, sort_order: str = 'asc') -> None:
+def main(directory: str, extension: str, display: bool = False, confirm: bool = False, sort_order: str = 'asc', delete: bool = False) -> None:
     """
     Fonction principale.
 
