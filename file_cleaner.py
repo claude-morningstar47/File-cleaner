@@ -4,7 +4,6 @@ import send2trash
 import typer
 from pathlib import Path
 import random
-import argparse
 
 
 def find_files_with_extension(directory: Path, extension: str, sort_order: str = 'asc') -> tuple:
