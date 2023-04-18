@@ -71,6 +71,8 @@ def delete_files(directory_path, files: list[str], confirm: bool = False) -> Non
 def display_files_content(directory_path, files: list[str], confirm: bool = False) -> None:
     """Affiche la liste des fichiers dans le dossier et permet de confirmer l'ouverture du contenu de chaque fichier."""
     print(f"Liste des fichiers dans le dossier '{directory_path}':")
+    print(f"* Il y a '{len(files)}' fichiers dans ce dossier. *")
+    print("---------------------------------------------------")
     for file in files:
         print(f"- {file}")
 
