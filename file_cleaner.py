@@ -3,6 +3,7 @@ import send2trash
 import typer
 from pathlib import Path
 import random
+import argparse
 
 
 def find_files_with_extension(directory: Path, extension: str, sort_order: str = 'asc') -> tuple:
@@ -92,14 +93,28 @@ def display_files_content(directory_path, files: list[str], confirm: bool = Fals
 
 def main(directory: str, extension: str, delete: bool = False, display: bool = False,
          confirm: bool = False, sort_order: str = 'asc') -> None:
-    """Fonction principale."""
+    """
+    Fonction principale.
+
+     --delete : Supprime tous les fichiers.\n
+     --confirm : Demande de confirmation.\n
+     --display : Affiche les contenus.\n
+     --sort-order : Définit l'ordre de tri des fichiers.
+    """
     directory_path = Path(directory)
     directory, files = find_files_with_extension(
         directory_path, extension, sort_order)
+
     if delete:
         delete_files(directory_path, files, confirm)
     elif display:
         display_files_content(directory_path, files, confirm)
+    else:
+        print("Aucune option sélectionnée. Veuillez utiliser l'une des options suivantes :")
+        print("--delete : Supprime tous les fichiers ayant l'extension spécifiée dans le dossier spécifié.")
+        print("--confirm : Demande une confirmation avant de supprimer chaque fichier.")
+        print("--display : Affiche le contenu de chaque fichier ayant l'extension spécifiée dans le dossier spécifié.")
+        print("--sort-order : Définit l'ordre de tri des fichiers. Les options possibles sont asc pour un tri alphabétique croissant, desc pour un tri alphabétique décroissant et random pour un tri aléatoire.")
 
 
 if __name__ == "__main__":
