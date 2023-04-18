@@ -19,10 +19,10 @@ Pour exécuter le script, utilisez la commande suivante :
 
 **Options**
 
-- --delete : Supprime tous les fichiers ayant l'extension spécifiée dans le dossier spécifié.
-- --confirm : Demande une confirmation avant de supprimer chaque fichier.
-- --display : Affiche le contenu de chaque fichier ayant l'extension spécifiée dans le dossier spécifié.
-- --sort-order : Définit l'ordre de tri des fichiers. Les options possibles sont asc pour un tri alphabétique croissant, desc pour un tri alphabétique décroissant et random pour un tri aléatoire.
+- -d, --delete : Supprime tous les fichiers ayant l'extension spécifiée dans le dossier spécifié.
+- -c, --confirm : Demande une confirmation avant de supprimer chaque fichier.
+- -p, --display : Affiche le contenu de chaque fichier ayant l'extension spécifiée dans le dossier spécifié.
+- -s, --sort-order : Définit l'ordre de tri des fichiers. Les options possibles sont asc pour un tri alphabétique croissant, desc pour un tri alphabétique décroissant et random pour un tri aléatoire.
 
 **Exemples**
 

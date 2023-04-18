@@ -1,8 +1,10 @@
+import click
 import os
 import send2trash
 import typer
 from pathlib import Path
 import random
+import argparse
 
 
 def find_files_with_extension(directory: Path, extension: str, sort_order: str = 'asc') -> tuple:
@@ -92,14 +94,21 @@ def display_files_content(directory_path, files: list[str], confirm: bool = Fals
                 print(f"Erreur lors de la lecture du fichier '{file}': {e}")
 
 
-def main(directory: str, extension: str, display: bool = False, confirm: bool = False, sort_order: str = 'asc', delete: bool = False) -> None:
+@click.command()
+@click.argument('directory')
+@click.argument('extension')
+@click.option('-d', '--delete', is_flag=True, help='Supprime tous les fichiers.')
+@click.option('-c', '--confirm', is_flag=True, help='Demande de confirmation.')
+@click.option('-p', '--display', is_flag=True, help='Affiche les contenus.')
+@click.option('-s', '--sort-order', type=click.Choice(['asc', 'desc', 'random']), default='asc', help='Définit l\'ordre de tri des fichiers.')
+def main(directory: str, extension: str, delete: bool, confirm: bool, display: bool, sort_order: str) -> None:
     """
     Fonction principale.
 
-     --delete : Supprime tous les fichiers.\n
-     --confirm : Demande de confirmation.\n
-     --display : Affiche les contenus.\n
-     --sort-order : Définit l'ordre de tri des fichiers.
+    --delete : Supprime tous les fichiers.\n
+    --confirm : Demande de confirmation.\n
+    --display : Affiche les contenus.\n
+    --sort-order : Définit l'ordre de tri des fichiers.
     """
     directory_path = Path(directory)
     directory, files = find_files_with_extension(
@@ -110,12 +119,16 @@ def main(directory: str, extension: str, display: bool = False, confirm: bool = 
     elif display:
         display_files_content(directory_path, files, confirm)
     else:
-        print("Aucune option sélectionnée. Veuillez utiliser l'une des options suivantes :")
-        print("--delete : Supprime tous les fichiers ayant l'extension spécifiée dans le dossier spécifié.")
-        print("--confirm : Demande une confirmation avant de supprimer chaque fichier.")
-        print("--display : Affiche le contenu de chaque fichier ayant l'extension spécifiée dans le dossier spécifié.")
-        print("--sort-order : Définit l'ordre de tri des fichiers. Les options possibles sont asc pour un tri alphabétique croissant, desc pour un tri alphabétique décroissant et random pour un tri aléatoire.")
+        click.echo(
+            "Aucune option sélectionnée. Veuillez utiliser l'une des options suivantes :")
+        click.echo(
+            "--delete : Supprime tous les fichiers ayant l'extension spécifiée dans le dossier spécifié.")
+        click.echo(
+            "--confirm : Demande une confirmation avant de supprimer chaque fichier.")
+        click.echo(
+            "--display : Affiche le contenu de chaque fichier ayant l'extension spécifiée dans le dossier spécifié.")
+        click.echo("--sort-order : Définit l'ordre de tri des fichiers. Les options possibles sont asc pour un tri alphabétique croissant, desc pour un tri alphabétique décroissant et random pour un tri aléatoire.")
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    main()
