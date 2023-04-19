@@ -71,7 +71,7 @@ def delete_files(directory_path: Path, files: list[str], confirm: bool = False) 
 def display_files_content(directory_path: Path, files: list[str], confirm: bool = False) -> None:
     """Affiche la liste des fichiers dans le dossier et permet de confirmer l'ouverture du contenu de chaque fichier."""
     click.echo(f"Liste des fichiers dans le dossier '{directory_path}':")
-    click.echo(f"* Il y a '{len(files)}' fichiers dans ce dossier. *")
+    click.echo(f"* Il existe '{len(files)}' fichiers dans ce répertoire. *")
     click.echo("---------------------------------------------------")
 
     if len(files) > 10:
