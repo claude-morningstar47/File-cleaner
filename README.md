@@ -13,6 +13,8 @@ Ce script Python permet de gérer les fichiers dans un dossier spécifié. Il pe
 1. Clonez le dépôt Git ou téléchargez les fichiers sur votre ordinateur.
 ```
 gh repo clone Claude-Mops47/File-cleaner
+ou 
+https://github.com/Claude-Mops47/File-cleaner.git
 ```
 3. Installez les dépendances en exécutant la commande suivante :
 ``` python
