@@ -11,7 +11,10 @@ Ce script Python permet de gérer les fichiers dans un dossier spécifié. Il pe
 **Installation**
 
 1. Clonez le dépôt Git ou téléchargez les fichiers sur votre ordinateur.
-2. Installez les dépendances en exécutant la commande suivante :`pip install send2trash typer`
+2. Installez les dépendances en exécutant la commande suivante :
+```python
+pip install send2trash typer
+```
 
 **Utilisation**
 Pour exécuter le script, utilisez la commande suivante :
