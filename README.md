@@ -11,8 +11,11 @@ Ce script Python permet de gérer les fichiers dans un dossier spécifié. Il pe
 **Installation**
 
 1. Clonez le dépôt Git ou téléchargez les fichiers sur votre ordinateur.
-2. Installez les dépendances en exécutant la commande suivante :
-```python
+```
+gh repo clone Claude-Mops47/File-cleaner
+```
+3. Installez les dépendances en exécutant la commande suivante :
+``` python
 pip install send2trash typer
 ```
 
