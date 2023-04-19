@@ -1,7 +1,6 @@
 import click
 import os
 import send2trash
-import typer
 from pathlib import Path
 import random
 
@@ -9,18 +8,19 @@ import random
 def find_files_with_extension(directory: Path, extension: str, sort_order: str = 'asc') -> tuple:
     """Retourne une liste des fichiers avec l'extension donnée dans le répertoire donné, ainsi que le chemin du dossier."""
     if not directory.is_dir():
-        raise typer.BadParameter(f"Le dossier '{directory}' n'existe pas.")
+        raise click.BadParameter(f"Le dossier '{directory}' n'existe pas.")
 
     # Vérifier que l'extension est valide
     if not extension:
-        raise typer.BadParameter("L'extension doit être spécifiée.")
+        raise click.BadParameter("L'extension doit être spécifiée.")
     elif not extension.startswith("."):
         extension = f".{extension}"
 
     # Récupérer la liste des noms de fichiers avec l'extension donnée
-    files = [f.name for f in directory.glob(f"*{extension}") if f.is_file()]
+    files = [entry.name for entry in os.scandir(
+        directory) if entry.is_file() and entry.name.endswith(extension)]
     if not files:
-        raise typer.BadParameter(
+        raise click.BadParameter(
             f"Aucun fichier avec l'extension '{extension}' trouvé dans le dossier '{directory}'.")
 
     # Trier la liste selon l'ordre alphabétique croissant ou décroissant
@@ -31,33 +31,33 @@ def find_files_with_extension(directory: Path, extension: str, sort_order: str =
     elif sort_order == "random":
         random.shuffle(files)
     else:
-        raise typer.BadParameter(
+        raise click.BadParameter(
             "L'ordre de tri doit être 'asc', 'desc' ou 'random'.")
     return directory, files
 
 
-def delete_file(directory_path, file) -> bool:
+def delete_file(directory_path: Path, file: str) -> bool:
     """Supprime un fichier."""
     chemin = directory_path.joinpath(file)
 
     if not os.path.exists(chemin):
-        print(f"Le fichier '{file}' n'existe pas.")
+        click.echo(f"Le fichier '{file}' n'existe pas.")
         return False
 
     try:
         send2trash.send2trash(chemin)
-        print(f"Le fichier '{file}' a été envoyé dans la corbeille.")
+        click.echo(f"Le fichier '{file}' a été envoyé dans la corbeille.")
         return True
     except Exception as e:
-        print(
+        click.echo(
             f"Erreur lors de la mise a la corbeille du fichier '{file}': {e}")
         return False
 
 
-def delete_files(directory_path, files: list[str], confirm: bool = False) -> None:
+def delete_files(directory_path: Path, files: list[str], confirm: bool = False) -> None:
     """Supprime tous les fichiers de la liste."""
     # Afficher une liste des fichiers à supprimer
-    print("Fichiers à supprimer :")
+    click.echo("Fichiers à supprimer :")
     for file in files:
         path = Path(file)
         if confirm:
@@ -68,29 +68,45 @@ def delete_files(directory_path, files: list[str], confirm: bool = False) -> Non
         delete_file(directory_path, path)
 
 
-def display_files_content(directory_path, files: list[str], confirm: bool = False) -> None:
+def display_files_content(directory_path: Path, files: list[str], confirm: bool = False) -> None:
     """Affiche la liste des fichiers dans le dossier et permet de confirmer l'ouverture du contenu de chaque fichier."""
-    print(f"Liste des fichiers dans le dossier '{directory_path}':")
-    print(f"* Il y a '{len(files)}' fichiers dans ce dossier. *")
-    print("---------------------------------------------------")
-    for file in files:
-        print(f"- {file}")
+    click.echo(f"Liste des fichiers dans le dossier '{directory_path}':")
+    click.echo(f"* Il y a '{len(files)}' fichiers dans ce dossier. *")
+    click.echo("---------------------------------------------------")
 
-        if confirm:
-            user_input = input(
-                f"Voulez-vous afficher le contenu du fichier '{file}' ? (Oui/Non) ")
-            if user_input.lower() not in ['oui', 'o']:
-                continue
+    if len(files) > 10:
+        num_cols = 4
+        num_rows, remainder = divmod(len(files), num_cols)
+        if remainder > 0:
+            num_rows += 1
 
-            # Afficher le contenu du fichier
-            path = directory_path.joinpath(file)
-            print(f"Contenu du fichier '{file}' :")
-            try:
-                with open(path, 'r') as f:
-                    content = f.read()
-                    print(content)
-            except Exception as e:
-                print(f"Erreur lors de la lecture du fichier '{file}': {e}")
+        for i in range(num_rows):
+            cols = [files[j] for j in range(i, len(files), num_rows)]
+            col_text = "{:20s}" * len(cols)
+            click.echo(col_text.format(*cols))
+
+    else:
+        for file in files:
+            click.echo(f"- {file}")
+
+    if confirm:
+        for file in files:
+            if confirm:
+                user_input = input(
+                    f"Voulez-vous afficher le contenu du fichier '{file}' ? (Oui/Non) ")
+                if user_input.lower() not in ['oui', 'o']:
+                    continue
+
+                # Afficher le contenu du fichier
+                path = directory_path.joinpath(file)
+                click.echo(f"Contenu du fichier '{file}' :")
+                try:
+                    with open(path, 'r') as f:
+                        content = f.read()
+                        click.echo(content)
+                except Exception as e:
+                    click.echo(
+                        f"Erreur lors de la lecture du fichier '{file}': {e}")
 
 
 @click.command()
