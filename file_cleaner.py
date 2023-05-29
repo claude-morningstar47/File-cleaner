@@ -39,7 +39,7 @@ def find_files_with_extension(directory: Path, extension: str, sort_order: str =
 def delete_file(directory_path: Path, file: str) -> bool:
     """Supprime un fichier."""
     chemin = directory_path.joinpath(file)
-
+// nomp
     if not os.path.exists(chemin):
         click.echo(f"Le fichier '{file}' n'existe pas.")
         return False
